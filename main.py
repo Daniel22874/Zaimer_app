@@ -2,7 +2,7 @@ from PyQt5.QtWidgets import QApplication, QMainWindow, QDialog
 from PyQt5.QtWidgets import QTableWidget, QTableWidgetItem
 from PyQt5 import uic
 import sys
-from test import len_rows, get_data, add_client
+from db_manager import len_rows, get_data, add_client
 
 
 class Main_window(QMainWindow):
