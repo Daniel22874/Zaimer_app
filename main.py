@@ -1,8 +1,8 @@
-from PyQt5.QtWidgets import QApplication, QMainWindow, QDialog
+from PyQt5.QtWidgets import QApplication, QMainWindow, QDialog, QMessageBox
 from PyQt5.QtWidgets import QTableWidget, QTableWidgetItem, QLabel
 from PyQt5 import uic
 import sys
-from test import len_rows, get_data, add_client
+from db_manager import len_rows, get_data, add_client
 from loans_window import Loans_window
 
 
@@ -20,7 +20,7 @@ class Main_window(QMainWindow):
 
 		for row in range(len(get_data())):
 			for col in range(len(get_data()[row])):
-				self.table.setItem(row, col, QTableWidgetItem(get_data()[row][col]))
+				self.table.setItem(row, col, QTableWidgetItem(str(get_data()[row][col])))
 
 		self.verticalLayout.addWidget(self.table)
 		self.pushButton.clicked.connect(self.in_dialog)
@@ -34,8 +34,16 @@ class Main_window(QMainWindow):
 		self.dialog.show()
 
 	def open_loans_window(self):
-		self.win = Loans_window()
-		self.win.show()
+		if not self.table.selectedItems():
+			QMessageBox.warning(self, "Ошибка", "Выбери клиента")
+		else:
+			row = self.table.currentRow()
+			data = {
+				"id": self.table.item(row, 0).text(),
+				"name": self.table.item(row, 1).text()
+			}
+			self.win = Loans_window(data)
+			self.win.show()
 
 
 class Dialog_window(QDialog):
