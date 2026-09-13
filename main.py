@@ -16,7 +16,6 @@ class Main_window(QMainWindow):
 		self.table.setRowCount(len_rows())
 		self.table.setColumnCount(4)
 		self.table.setHorizontalHeaderLabels(["id", "ФИО", "Паспорт", "Телефон"])
-
 		for row in range(len(get_data())):
 			for col in range(len(get_data()[row])):
 				self.table.setItem(row, col, QTableWidgetItem(get_data()[row][col]))
