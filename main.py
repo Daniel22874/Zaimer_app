@@ -8,7 +8,7 @@ from db_manager import len_rows, get_data, add_client
 class Main_window(QMainWindow):
 	def __init__(self):
 		super(Main_window, self).__init__()
-		uic.loadUi('main_window.ui', self)
+		uic.loadUi('ui/main_window.ui', self)
 		self.setUI()
 
 	def setUI(self):
@@ -32,7 +32,7 @@ class Main_window(QMainWindow):
 class Dialog_window(QDialog):
 	def __init__(self):
 		super(Dialog_window, self).__init__()
-		uic.loadUi("dialog_for_main.ui", self)
+		uic.loadUi("ui/dialog_for_main.ui", self)
 		self.buttonBox.accepted.connect(lambda: add_client(self.line_fio.text(),
 				self.line_passport.text(), self.line_phone.text()))
 
