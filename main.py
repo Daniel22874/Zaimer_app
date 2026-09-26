@@ -1,5 +1,6 @@
 from PyQt5.QtWidgets import QApplication, QMainWindow, QDialog
 from PyQt5.QtWidgets import QTableWidget, QTableWidgetItem
+from PyQt5.QtGui import QPixmap
 from PyQt5 import uic
 import sys
 from db_manager import len_rows, get_data, add_client
@@ -9,9 +10,11 @@ class Main_window(QMainWindow):
 	def __init__(self):
 		super(Main_window, self).__init__()
 		uic.loadUi('ui/main_window.ui', self)
+		self.setFixedSize(801, 591)
 		self.setUI()
 
 	def setUI(self):
+		self.setWindowTitle("Zаймер")
 		self.table = QTableWidget()
 		self.table.setRowCount(len_rows())
 		self.table.setColumnCount(4)
@@ -22,6 +25,8 @@ class Main_window(QMainWindow):
 				self.table.setItem(row, col, QTableWidgetItem(get_data()[row][col]))
 
 		self.verticalLayout.addWidget(self.table)
+
+		self.label.setPixmap(QPixmap("background/dollar_main.jpg"))
 		self.pushButton.clicked.connect(self.in_dialog)
 
 	def in_dialog(self):
@@ -33,6 +38,8 @@ class Dialog_window(QDialog):
 	def __init__(self):
 		super(Dialog_window, self).__init__()
 		uic.loadUi("ui/dialog_for_main.ui", self)
+		self.setWindowTitle("Добавить клиента")
+		self.label_4.setPixmap(QPixmap("background/dollar_dialog.jpg"))
 		self.buttonBox.accepted.connect(lambda: add_client(self.line_fio.text(),
 				self.line_passport.text(), self.line_phone.text()))
 
