@@ -11,6 +11,7 @@ class New_payment_window(QMainWindow):
 		super(QMainWindow, self).__init__()
 		uic.loadUi("ui/new_payment_window.ui", self)
 		self.setWindowTitle("Внести платёж")
+		self.setFixedSize(408, 208)
 
 		self.label_3.setPixmap(QPixmap("background/dollar_new_payment.jpg"))
 		self.pushButton.clicked.connect(self.add_pay)
