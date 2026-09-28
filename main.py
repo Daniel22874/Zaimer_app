@@ -39,6 +39,7 @@ class Dialog_window(QDialog):
 		super(Dialog_window, self).__init__()
 		uic.loadUi("ui/dialog_for_main.ui", self)
 		self.setWindowTitle("Добавить клиента")
+		self.setFixedSize(401, 300)
 		self.label_4.setPixmap(QPixmap("background/dollar_dialog.jpg"))
 		self.buttonBox.accepted.connect(lambda: add_client(self.line_fio.text(),
 				self.line_passport.text(), self.line_phone.text()))
