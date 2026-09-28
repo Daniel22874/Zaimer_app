@@ -11,6 +11,7 @@ class New_loan_window(QMainWindow):
 		super(New_loan_window, self).__init__()
 		uic.loadUi("ui/new_loan_window.ui", self)
 		self.setWindowTitle("Новый займ")
+		self.setFixedSize(331, 236)
 
 		self.label_4.setPixmap(QPixmap("background/dollar_new_loan.jpg"))
 		self.pushButton.clicked.connect(self.getLoan)
