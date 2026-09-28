@@ -37,3 +37,10 @@ def add_loan(amount, issue_date, term_months, interest_rate):
         cursor.execute("INSERT INTO loans (client_id, amount, issue_date, term_months, interest_rate, status) "
                        "VALUES ('Романов Роман Александрович', ?, ?, ?, ?, 'active')",
                        (amount, issue_date, term_months, interest_rate))
+
+
+def add_payment(amount, payment_date, comment):
+    with sq.connect("zaimer.db") as connect:
+        cursor = connect.cursor()
+        cursor.execute("INSERT INTO payments (loan_id, amount, payment_date, comment) VALUES (3, ?, ?, ?)",
+                       (amount, payment_date, comment))
