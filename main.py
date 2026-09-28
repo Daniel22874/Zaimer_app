@@ -1,9 +1,10 @@
-from PyQt5.QtWidgets import QApplication, QMainWindow, QDialog
-from PyQt5.QtWidgets import QTableWidget, QTableWidgetItem
+from PyQt5.QtWidgets import QApplication, QMainWindow, QDialog, QMessageBox
+from PyQt5.QtWidgets import QTableWidget, QTableWidgetItem, QLabel
 from PyQt5.QtGui import QPixmap
 from PyQt5 import uic
 import sys
 from db_manager import len_rows, get_data, add_client
+from loans_window import Loans_window
 
 
 class Main_window(QMainWindow):
@@ -22,16 +23,32 @@ class Main_window(QMainWindow):
 
 		for row in range(len(get_data())):
 			for col in range(len(get_data()[row])):
-				self.table.setItem(row, col, QTableWidgetItem(get_data()[row][col]))
+				self.table.setItem(row, col, QTableWidgetItem(str(get_data()[row][col])))
 
 		self.verticalLayout.addWidget(self.table)
 
 		self.label.setPixmap(QPixmap("background/dollar_main.jpg"))
 		self.pushButton.clicked.connect(self.in_dialog)
+		self.pushButton_2.clicked.connect(self.open_loans_window)
+
+		self.status = QLabel(f"Кол-во клиентов: {len_rows()}, кол-во займов: 5")
+		self.statusBar().addWidget(self.status)
 
 	def in_dialog(self):
 		self.dialog = Dialog_window()
 		self.dialog.show()
+
+	def open_loans_window(self):
+		if not self.table.selectedItems():
+			QMessageBox.warning(self, "Ошибка", "Выбери клиента")
+		else:
+			row = self.table.currentRow()
+			data = {
+				"id": self.table.item(row, 0).text(),
+				"name": self.table.item(row, 1).text()
+			}
+			self.win = Loans_window(data)
+			self.win.show()
 
 
 class Dialog_window(QDialog):
