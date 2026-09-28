@@ -1,5 +1,6 @@
 from PyQt5.QtWidgets import QApplication, QMainWindow
 from PyQt5 import uic
+from PyQt5.QtGui import QPixmap
 import sys
 from datetime import datetime
 from db_manager import add_loan
@@ -9,6 +10,9 @@ class New_loan_window(QMainWindow):
 	def __init__(self):
 		super(New_loan_window, self).__init__()
 		uic.loadUi("ui/new_loan_window.ui", self)
+		self.setWindowTitle("Новый займ")
+
+		self.label_4.setPixmap(QPixmap("background/dollar_new_loan.jpg"))
 		self.pushButton.clicked.connect(self.getLoan)
 
 	def getLoan(self):
