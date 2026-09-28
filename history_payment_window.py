@@ -1,6 +1,7 @@
 from PyQt5.QtWidgets import QApplication, QMainWindow
 from PyQt5.QtWidgets import QTableWidget
 from PyQt5 import uic
+from PyQt5.QtGui import QPixmap
 import sys
 
 
@@ -8,6 +9,9 @@ class History_payment_window(QMainWindow):
 	def __init__(self):
 		super(QMainWindow, self).__init__()
 		uic.loadUi("ui/history_payment_window.ui", self)
+		self.setWindowTitle("История внесения платежей")
+
+		self.label_2.setPixmap(QPixmap('background/dollar_history_payment.jpg'))
 		self.table = QTableWidget()
 		self.table.setColumnCount(3)
 		self.table.setRowCount(12)
