@@ -21,6 +21,7 @@ class Loans_window(QMainWindow):
 		self.verticalLayout.addWidget(self.loan_table)
 
 		self.setWindowTitle(self.client_name)
+		self.setFixedSize(800, 600)
 		self.back_button.clicked.connect(self.open_main_window)
 
 	def open_main_window(self):
