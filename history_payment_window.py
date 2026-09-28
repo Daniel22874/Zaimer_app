@@ -10,6 +10,7 @@ class History_payment_window(QMainWindow):
 		super(QMainWindow, self).__init__()
 		uic.loadUi("ui/history_payment_window.ui", self)
 		self.setWindowTitle("История внесения платежей")
+		self.setFixedSize(611, 451)
 
 		self.label_2.setPixmap(QPixmap('background/dollar_history_payment.jpg'))
 		self.table = QTableWidget()
