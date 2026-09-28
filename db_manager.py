@@ -29,3 +29,11 @@ def len_rows_loans():
         cursor.execute("SELECT * FROM loans")
         res = cursor.fetchall()
         return len(res)
+
+
+def add_loan(amount, issue_date, term_months, interest_rate):
+    with sq.connect("zaimer.db") as connect:
+        cursor = connect.cursor()
+        cursor.execute("INSERT INTO loans (client_id, amount, issue_date, term_months, interest_rate, status) "
+                       "VALUES ('Романов Роман Александрович', ?, ?, ?, ?, 'active')",
+                       (amount, issue_date, term_months, interest_rate))
