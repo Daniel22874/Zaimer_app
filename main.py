@@ -3,7 +3,7 @@ from PyQt5.QtWidgets import QTableWidget, QTableWidgetItem, QLabel
 from PyQt5.QtGui import QPixmap
 from PyQt5 import uic
 import sys
-from db_manager import len_rows, get_data, add_client
+from db_manager import len_rows, get_clients, add_client, get_loans
 from loans_window import Loans_window
 
 
@@ -20,9 +20,9 @@ class Main_window(QMainWindow):
 		self.table.setRowCount(len_rows())
 		self.table.setColumnCount(4)
 		self.table.setHorizontalHeaderLabels(["id", "ФИО", "Паспорт", "Телефон"])
-		for row in range(len(get_data())):
-			for col in range(len(get_data()[row])):
-				self.table.setItem(row, col, QTableWidgetItem(str(get_data()[row][col])))
+		for row in range(len(get_clients())):
+			for col in range(len(get_clients()[row])):
+				self.table.setItem(row, col, QTableWidgetItem(str(get_clients()[row][col])))
 
 		self.verticalLayout.addWidget(self.table)
 

@@ -1,14 +1,15 @@
-from PyQt5.QtWidgets import QApplication, QMainWindow
+from PyQt5.QtWidgets import QMainWindow
 from PyQt5.QtWidgets import QTableWidget
 from PyQt5 import uic
 from PyQt5.QtGui import QPixmap
-import sys
 
 
 class History_payment_window(QMainWindow):
-	def __init__(self):
+	def __init__(self, data):
 		super(QMainWindow, self).__init__()
 		uic.loadUi("ui/history_payment_window.ui", self)
+		self.client_id = data["id"]
+		self.client_name = data["name"]
 		self.setWindowTitle("История внесения платежей")
 		self.setFixedSize(611, 451)
 
@@ -18,10 +19,3 @@ class History_payment_window(QMainWindow):
 		self.table.setRowCount(12)
 		self.table.setHorizontalHeaderLabels(["Дата", "Сумма", "Комментарий"])
 		self.verticalLayout.addWidget(self.table)
-
-
-if __name__ == "__main__":
-	app = QApplication(sys.argv)
-	win = History_payment_window()
-	win.show()
-	sys.exit(app.exec_())

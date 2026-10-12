@@ -9,10 +9,18 @@ def len_rows():
         return len(res)
 
 
-def get_data():
+def get_clients():
     with sq.connect("zaimer.db") as connect:
         cursor = connect.cursor()
         cursor.execute("SELECT * FROM clients")
+        res = cursor.fetchall()
+        return res
+
+
+def get_loans(client_id):
+    with sq.connect("zaimer.db") as connect:
+        cursor = connect.cursor()
+        cursor.execute("SELECT amount, issue_date, term_months, interest_rate, status FROM loans WHERE client_id = ?", (client_id, ))
         res = cursor.fetchall()
         return res
 
@@ -31,12 +39,12 @@ def len_rows_loans():
         return len(res)
 
 
-def add_loan(amount, issue_date, term_months, interest_rate):
+def add_loan(client_id, amount, issue_date, term_months, interest_rate):
     with sq.connect("zaimer.db") as connect:
         cursor = connect.cursor()
         cursor.execute("INSERT INTO loans (client_id, amount, issue_date, term_months, interest_rate, status) "
-                       "VALUES ('Романов Роман Александрович', ?, ?, ?, ?, 'active')",
-                       (amount, issue_date, term_months, interest_rate))
+                       "VALUES (?, ?, ?, ?, ?, 'active')",
+                       (client_id, amount, issue_date, term_months, interest_rate))
 
 
 def add_payment(amount, payment_date, comment):

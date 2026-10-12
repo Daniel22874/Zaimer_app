@@ -1,15 +1,16 @@
-from PyQt5.QtWidgets import QApplication, QMainWindow
+from PyQt5.QtWidgets import QMainWindow
 from PyQt5 import uic
 from PyQt5.QtGui import QPixmap
-import sys
 from db_manager import add_payment
 from datetime import datetime
 
 
 class New_payment_window(QMainWindow):
-	def __init__(self):
+	def __init__(self, data):
 		super(QMainWindow, self).__init__()
 		uic.loadUi("ui/new_payment_window.ui", self)
+		self.client_id = data["id"]
+		self.client_name = data["name"]
 		self.setWindowTitle("Внести платёж")
 		self.setFixedSize(408, 208)
 
@@ -21,10 +22,3 @@ class New_payment_window(QMainWindow):
 		print(self.lineEdit_2.text())
 		date = datetime.now().strftime("%Y-%m-%d")
 		add_payment(float(self.lineEdit.text()), date, self.lineEdit_2.text())
-
-
-if __name__ == "__main__":
-	app = QApplication(sys.argv)
-	win = New_payment_window()
-	win.show()
-	sys.exit(app.exec_())
