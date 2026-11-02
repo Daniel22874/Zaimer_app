@@ -1,7 +1,8 @@
 from PyQt5.QtWidgets import QMainWindow
-from PyQt5.QtWidgets import QTableWidget
+from PyQt5.QtWidgets import QTableWidget, QTableWidgetItem
 from PyQt5 import uic
 from PyQt5.QtGui import QPixmap
+from db_manager import get_payments
 
 
 class History_payment_window(QMainWindow):
@@ -19,3 +20,8 @@ class History_payment_window(QMainWindow):
 		self.table.setRowCount(12)
 		self.table.setHorizontalHeaderLabels(["Дата", "Сумма", "Комментарий"])
 		self.verticalLayout.addWidget(self.table)
+
+		for row in range(len(get_payments())):
+			for col in range(len(get_payments()[row])):
+				self.table.setItem(row, col, QTableWidgetItem(str(get_payments()[row][col])))
+

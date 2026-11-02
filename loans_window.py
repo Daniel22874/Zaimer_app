@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QMainWindow
+from PyQt5.QtWidgets import QMainWindow, QMessageBox
 from PyQt5.QtWidgets import QTableWidget, QTableWidgetItem
 from PyQt5.QtGui import QPixmap
 from PyQt5 import uic
@@ -18,9 +18,9 @@ class Loans_window(QMainWindow):
 		uic.loadUi("ui/loans_window.ui", self)
 		self.label.setPixmap(QPixmap("background/dollar_loans.jpg"))
 		self.loan_table = QTableWidget()
-		self.loan_table.setColumnCount(5)
+		self.loan_table.setColumnCount(6)
 		self.loan_table.setRowCount(len_rows_loans())
-		self.loan_table.setHorizontalHeaderLabels(["amount", "issue date", "term months", "interest rate", "status"])
+		self.loan_table.setHorizontalHeaderLabels(["id", "amount", "issue date", "term months", "interest rate", "status"])
 		for row in range(len(get_loans(self.client_id))):
 			for col in range(len(get_loans(self.client_id)[row])):
 				self.loan_table.setItem(row, col, QTableWidgetItem(str(get_loans(self.client_id)[row][col])))
@@ -42,8 +42,16 @@ class Loans_window(QMainWindow):
 		self.win.show()
 
 	def open_new_payment_window(self):
-		self.win = New_payment_window(self.data)
-		self.win.show()
+		if not self.loan_table.selectedItems():
+			QMessageBox.warning(self, "Ошибка", "Выбери займ для его погашения!")
+		else:
+			row = self.loan_table.currentRow()
+			data = {
+				"id": self.loan_table.item(row, 0).text(),
+				"amount": self.loan_table.item(row, 1).text()
+			}
+			self.win = New_payment_window(data)
+			self.win.show()
 
 	def open_history_payment_window(self):
 		self.win = History_payment_window(self.data)

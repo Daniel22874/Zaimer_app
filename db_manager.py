@@ -20,7 +20,8 @@ def get_clients():
 def get_loans(client_id):
     with sq.connect("zaimer.db") as connect:
         cursor = connect.cursor()
-        cursor.execute("SELECT amount, issue_date, term_months, interest_rate, status FROM loans WHERE client_id = ?", (client_id, ))
+        cursor.execute("SELECT id, amount, issue_date, term_months, interest_rate, status FROM loans "
+                       "WHERE client_id = ?", (client_id, ))
         res = cursor.fetchall()
         return res
 
@@ -47,8 +48,22 @@ def add_loan(client_id, amount, issue_date, term_months, interest_rate):
                        (client_id, amount, issue_date, term_months, interest_rate))
 
 
-def add_payment(amount, payment_date, comment):
+def add_payment(loan_id, amount, payment_date, comment):
     with sq.connect("zaimer.db") as connect:
         cursor = connect.cursor()
-        cursor.execute("INSERT INTO payments (loan_id, amount, payment_date, comment) VALUES (3, ?, ?, ?)",
-                       (amount, payment_date, comment))
+        cursor.execute("INSERT INTO payments (loan_id, amount, payment_date, comment) VALUES (?, ?, ?, ?)",
+                       (loan_id, amount, payment_date, comment))
+
+
+def get_payments():
+    with sq.connect("zaimer.db") as connect:
+        cursor = connect.cursor()
+        cursor.execute("SELECT payment_date, amount, comment FROM payments")
+        res = cursor.fetchall()
+        return res
+
+
+def update_status_loan(loan_id):
+    with sq.connect("zaimer.db") as connect:
+        cursor = connect.cursor()
+        cursor.execute("UPDATE loans SET status = 'closed' WHERE id = ?", (loan_id, ))
