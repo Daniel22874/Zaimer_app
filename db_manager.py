@@ -55,10 +55,11 @@ def add_payment(loan_id, amount, payment_date, comment):
                        (loan_id, amount, payment_date, comment))
 
 
-def get_payments():
+def get_payments(client_id):
     with sq.connect("zaimer.db") as connect:
         cursor = connect.cursor()
-        cursor.execute("SELECT payment_date, amount, comment FROM payments")
+        cursor.execute("SELECT payment_date, amount, comment FROM payments WHERE loan_id = ("
+                       "SELECT id FROM loans WHERE client_id = ?)", (client_id, ))
         res = cursor.fetchall()
         return res
 

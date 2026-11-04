@@ -21,7 +21,7 @@ class History_payment_window(QMainWindow):
 		self.table.setHorizontalHeaderLabels(["Дата", "Сумма", "Комментарий"])
 		self.verticalLayout.addWidget(self.table)
 
-		for row in range(len(get_payments())):
-			for col in range(len(get_payments()[row])):
-				self.table.setItem(row, col, QTableWidgetItem(str(get_payments()[row][col])))
+		for row in range(len(get_payments(self.client_id))):
+			for col in range(len(get_payments(self.client_id)[row])):
+				self.table.setItem(row, col, QTableWidgetItem(str(get_payments(self.client_id)[row][col])))
 
