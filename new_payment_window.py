@@ -8,7 +8,7 @@ from db_manager import update_status_loan
 
 class New_payment_window(QMainWindow):
 	def __init__(self, data):
-		super(QMainWindow, self).__init__()
+		super(New_payment_window, self).__init__()
 		uic.loadUi("ui/new_payment_window.ui", self)
 		self.loan_id = data["id"]
 		self.amount = data["amount"]
@@ -19,18 +19,23 @@ class New_payment_window(QMainWindow):
 		self.pushButton.clicked.connect(self.add_pay)
 
 	def add_pay(self):
-		print(self.lineEdit.text())
-		print(self.lineEdit_2.text())
 		date = datetime.now().strftime("%Y-%m-%d")
 		if float(self.lineEdit.text()) > float(self.amount):
 			add_payment(self.loan_id, float(self.lineEdit.text()), date, self.lineEdit_2.text())
 			update_status_loan(self.loan_id)
-			print(f"Ваша сдача: {float(self.lineEdit.text()) - float(self.amount)}")
+			QMessageBox.warning(self, "Оплата займа прошла",
+			                    f"Ваша сдача: {float(self.lineEdit.text()) - float(self.amount)}. Перезапустите для внесения изменений!")
+			self.hide()
 		if float(self.lineEdit.text()) == float(self.amount):
 			add_payment(self.loan_id, float(self.lineEdit.text()), date, self.lineEdit_2.text())
 			update_status_loan(self.loan_id)
+			QMessageBox.warning(self, "Оплата займа прошла",
+			                    f"Ваша сдача: {float(self.lineEdit.text()) - float(self.amount)}. Перезапустите для внесения изменений!")
+			self.hide()
 		if float(self.lineEdit.text()) < float(self.amount):
-			print("Вносимая сумма меньше суммы для погашения долга!")
+			QMessageBox.warning(self, "Оплата займа не прошла",
+			                    "Вносимая сумма меньше суммы для погашения долга!")
+
 
 
 

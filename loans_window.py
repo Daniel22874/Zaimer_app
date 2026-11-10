@@ -42,7 +42,8 @@ class Loans_window(QMainWindow):
 		self.win.show()
 
 	def open_new_payment_window(self):
-		if not self.loan_table.selectedItems():
+		items = [el.text() for el in self.loan_table.selectedItems()]
+		if len(items) != 6 or 'closed' in items:
 			QMessageBox.warning(self, "Ошибка", "Выбери займ для его погашения!")
 		else:
 			row = self.loan_table.currentRow()

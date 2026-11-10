@@ -3,7 +3,7 @@ from PyQt5.QtWidgets import QTableWidget, QTableWidgetItem, QLabel
 from PyQt5.QtGui import QPixmap
 from PyQt5 import uic
 import sys
-from db_manager import len_rows, get_clients, add_client, get_loans
+from db_manager import len_rows, get_clients, add_client, len_rows_loans, init_db
 from loans_window import Loans_window
 
 
@@ -30,7 +30,7 @@ class Main_window(QMainWindow):
 		self.pushButton.clicked.connect(self.in_dialog)
 		self.pushButton_2.clicked.connect(self.open_loans_window)
 
-		self.status = QLabel(f"Кол-во клиентов: {len_rows()}, кол-во займов: 5")
+		self.status = QLabel(f"Кол-во клиентов: {len_rows()}, кол-во займов: {len_rows_loans()}")
 		self.statusBar().addWidget(self.status)
 
 	def in_dialog(self):
@@ -57,12 +57,19 @@ class Dialog_window(QDialog):
 		self.setWindowTitle("Добавить клиента")
 		self.setFixedSize(401, 300)
 		self.label_4.setPixmap(QPixmap("background/dollar_dialog.jpg"))
-		self.buttonBox.accepted.connect(lambda: add_client(self.line_fio.text(),
-				self.line_passport.text(), self.line_phone.text()))
+		self.buttonBox.accepted.connect(self.agree)
+
+	def agree(self):
+		if len(self.line_fio.text()) == 0 or len(self.line_passport.text()) == 0 or len(self.line_phone.text()) == 0:
+			QMessageBox.warning(self, "Ошибка", "Не все поля заполнены!")
+			return
+		QMessageBox.warning(self, "Клиент был добавлен", "Пожалуйста, перезапустите приложение для внесения изменений!")
+		add_client(self.line_fio.text(), self.line_passport.text(), self.line_phone.text())
 
 
 if __name__ == '__main__':
 	app = QApplication(sys.argv)
+	init_db()
 	win = Main_window()
 	win.show()
 	sys.exit(app.exec_())
