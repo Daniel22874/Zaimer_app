@@ -1,15 +1,17 @@
 import sqlite3 as sq
 
 
-def init_db():
+def init_db():          # создание БД при запуске приложения
     with sq.connect("zaimer.db") as connect:
         cursor = connect.cursor()
+        # создание таблицы clients
         cursor.execute("""CREATE TABLE IF NOT EXISTS clients
                 (id INTEGER PRIMARY KEY AUTOINCREMENT,
                 full_name TEXT NOT NULL,
                 passport TEXT NOT NULL,
                 phone TEXT NOT NULL)
                 """)
+        # создание таблицы loans
         cursor.execute("""CREATE TABLE IF NOT EXISTS loans
                 (id INTEGER PRIMARY KEY AUTOINCREMENT,
                 client_id INTEGER NOT NULL,
@@ -20,6 +22,7 @@ def init_db():
                 status TEXT NOT NULL,
                 FOREIGN KEY (client_id) REFERENCES clients(id))
                 """)
+        # создание таблицы payments
         cursor.execute("""CREATE TABLE IF NOT EXISTS payments
                 (id INTEGER PRIMARY KEY AUTOINCREMENT,
                 loan_id INTEGER NOT NULL,
@@ -30,7 +33,7 @@ def init_db():
                 """)
 
 
-def len_rows():
+def len_rows():        # возвращает кол-во клиентов добавленных в БД
     with sq.connect("zaimer.db") as connect:
         cursor = connect.cursor()
         cursor.execute("SELECT * FROM clients")
@@ -38,7 +41,7 @@ def len_rows():
         return len(res)
 
 
-def get_clients():
+def get_clients():     # возвращает клиентов добавленных в БД
     with sq.connect("zaimer.db") as connect:
         cursor = connect.cursor()
         cursor.execute("SELECT * FROM clients")
@@ -46,7 +49,7 @@ def get_clients():
         return res
 
 
-def get_loans(client_id):
+def get_loans(client_id):       # возвращает займы заданного клиента
     with sq.connect("zaimer.db") as connect:
         cursor = connect.cursor()
         cursor.execute("SELECT id, amount, issue_date, term_months, interest_rate, status FROM loans "
@@ -55,13 +58,13 @@ def get_loans(client_id):
         return res
 
 
-def add_client(fio, passport, phone):
+def add_client(fio, passport, phone):       # добавление данных клиента в БД
     with sq.connect("zaimer.db") as connect:
         cursor = connect.cursor()
         cursor.execute("INSERT INTO clients (full_name, passport, phone) VALUES (?, ?, ?)", (fio, passport, phone))
 
 
-def len_rows_loans():
+def len_rows_loans():                       # возвращает кол-во займов добавленных в БД
     with sq.connect("zaimer.db") as connect:
         cursor = connect.cursor()
         cursor.execute("SELECT * FROM loans")
@@ -69,7 +72,7 @@ def len_rows_loans():
         return len(res)
 
 
-def len_rows_payments():
+def len_rows_payments():                    # возвращает кол-во платежей из БД
     with sq.connect("zaimer.db") as connect:
         cursor = connect.cursor()
         cursor.execute("SELECT * FROM payments")
@@ -77,7 +80,7 @@ def len_rows_payments():
         return len(res)
 
 
-def add_loan(client_id, amount, issue_date, term_months, interest_rate):
+def add_loan(client_id, amount, issue_date, term_months, interest_rate):    # добавление нового займа в БД
     with sq.connect("zaimer.db") as connect:
         cursor = connect.cursor()
         cursor.execute("INSERT INTO loans (client_id, amount, issue_date, term_months, interest_rate, status) "
@@ -85,14 +88,14 @@ def add_loan(client_id, amount, issue_date, term_months, interest_rate):
                        (client_id, amount, issue_date, term_months, interest_rate))
 
 
-def add_payment(loan_id, amount, payment_date, comment):
+def add_payment(loan_id, amount, payment_date, comment):            # добавление внесённого платежа в БД
     with sq.connect("zaimer.db") as connect:
         cursor = connect.cursor()
         cursor.execute("INSERT INTO payments (loan_id, amount, payment_date, comment) VALUES (?, ?, ?, ?)",
                        (loan_id, amount, payment_date, comment))
 
 
-def get_payments(client_id):
+def get_payments(client_id):        # возвращает платежи заданного клиента
     with sq.connect("zaimer.db") as connect:
         cursor = connect.cursor()
         cursor.execute("SELECT payment_date, amount, comment FROM payments WHERE loan_id IN ("
@@ -101,7 +104,7 @@ def get_payments(client_id):
         return res
 
 
-def update_status_loan(loan_id):
+def update_status_loan(loan_id):    # обновление статуса клиента, который погасил займ
     with sq.connect("zaimer.db") as connect:
         cursor = connect.cursor()
         cursor.execute("UPDATE loans SET status = 'closed' WHERE id = ?", (loan_id, ))

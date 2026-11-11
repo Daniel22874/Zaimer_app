@@ -7,41 +7,42 @@ from db_manager import len_rows, get_clients, add_client, len_rows_loans, init_d
 from loans_window import Loans_window
 
 
-class Main_window(QMainWindow):
+class Main_window(QMainWindow):                 # класс основного окна приложения
 	def __init__(self):
 		super(Main_window, self).__init__()
 		uic.loadUi('ui/main_window.ui', self)
-		self.setFixedSize(801, 591)
+		self.setFixedSize(801, 591)             # фиксированные габариты окна
 		self.setUI()
 
 	def setUI(self):
 		self.setWindowTitle("Zаймер")
 		self.table = QTableWidget()
-		self.table.setRowCount(len_rows())
-		self.table.setColumnCount(4)
+		self.table.setRowCount(len_rows())      # таблица имеет кол-во строк по кол-ву имеющихся клиентов из БД
+		self.table.setColumnCount(4)            # 4 столбца
 		self.table.setHorizontalHeaderLabels(["id", "ФИО", "Паспорт", "Телефон"])
+		# добавление данных клиентов из БД в таблицу
 		for row in range(len(get_clients())):
 			for col in range(len(get_clients()[row])):
 				self.table.setItem(row, col, QTableWidgetItem(str(get_clients()[row][col])))
 
-		self.verticalLayout.addWidget(self.table)
+		self.verticalLayout.addWidget(self.table)       # отображение таблицы в приложении
 
 		self.label.setPixmap(QPixmap("background/dollar_main.jpg"))
-		self.pushButton.clicked.connect(self.in_dialog)
-		self.pushButton_2.clicked.connect(self.open_loans_window)
+		self.pushButton.clicked.connect(self.in_dialog)     # нажатие кнопки с добавлением клиента
+		self.pushButton_2.clicked.connect(self.open_loans_window)   # нажатие кнопки просмотра займов
 
 		self.status = QLabel(f"Кол-во клиентов: {len_rows()}, кол-во займов: {len_rows_loans()}")
-		self.statusBar().addWidget(self.status)
+		self.statusBar().addWidget(self.status)     # отображение статуса о кол-ве клиентов и займов
 
-	def in_dialog(self):
+	def in_dialog(self):                        # запуск окна добавления клиента
 		self.dialog = Dialog_window()
 		self.dialog.show()
 
-	def open_loans_window(self):
+	def open_loans_window(self):                # запуск окна просмотра займов выделенного клиента в таблице
 		if not self.table.selectedItems():
 			QMessageBox.warning(self, "Ошибка", "Выбери клиента")
 		else:
-			row = self.table.currentRow()
+			row = self.table.currentRow()       # импорт нужных данных для использования в окне просмотра займов
 			data = {
 				"id": self.table.item(row, 0).text(),
 				"name": self.table.item(row, 1).text()
@@ -60,6 +61,7 @@ class Dialog_window(QDialog):
 		self.buttonBox.accepted.connect(self.agree)
 
 	def agree(self):
+		# проверка на заполненность всех полей при добавлении клиента
 		if len(self.line_fio.text()) == 0 or len(self.line_passport.text()) == 0 or len(self.line_phone.text()) == 0:
 			QMessageBox.warning(self, "Ошибка", "Не все поля заполнены!")
 			return
